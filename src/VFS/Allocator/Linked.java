@@ -1,4 +1,7 @@
 package VFS.Allocator;
 
-public class Linked {
+public class Linked implements Allocator{
+    public Linked(int blocks) {
+
+    }
 }
