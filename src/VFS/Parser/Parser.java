@@ -6,6 +6,7 @@ import java.util.Map;
 import static java.util.Map.entry;
 public class Parser {
 
+    // a map of the <commands, numberOfArguments>
     private final Map<String, Integer> cmdArgs = Map.ofEntries(
             entry("CreateFile", 3),
             entry("CreateFolder", 1),
