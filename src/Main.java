@@ -4,10 +4,11 @@ import VFS.Allocator.Indexed;
 import VFS.Allocator.Linked;
 import VFS.Parser.Parser;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Parser parser = null;
         Scanner input = new Scanner(System.in);
 

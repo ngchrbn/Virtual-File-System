@@ -1,11 +1,13 @@
 package VFS.Parser;
 
 import VFS.Allocator.Allocator;
+import VFS.VFileManager.VirtualFileSystem;
 
+import java.io.IOException;
 import java.util.Map;
 import static java.util.Map.entry;
 public class Parser {
-
+    VirtualFileSystem vfs;
     // a map of the <commands, numberOfArguments>
     private final Map<String, Integer> cmdArgs = Map.ofEntries(
             entry("CreateFile", 3),
@@ -16,8 +18,8 @@ public class Parser {
             entry("DisplayDiskStructure", 0)
     );
 
-    public Parser(Allocator allocator) {
-
+    public Parser(Allocator allocator) throws IOException {
+        this.vfs = new VirtualFileSystem(allocator);
     }
 
     /**
@@ -33,10 +35,15 @@ public class Parser {
             help();
         else
         {
+            int spaceOne = command.indexOf(" ");
+            String[] args = command.substring(spaceOne+1).split(" ");
             int argsLen = command.substring(1).split(" ").length -1;
             if (argsLen != cmdArgs.get(cmd))
             {
                 helpArg(cmd);
+            }
+            else {
+                this.vfs.execute(cmd, args, cmdArgs.get(cmd));
             }
         }
     }
@@ -64,5 +71,6 @@ public class Parser {
         System.out.println("\nYou are allowed to use only these commands: \n");
         for(String command: cmdArgs.keySet())
             System.out.println("* " + command);
+        System.out.println("* q to quit");
     }
 }
