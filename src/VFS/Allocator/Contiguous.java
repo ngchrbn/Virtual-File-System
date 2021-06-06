@@ -1,4 +1,7 @@
 package VFS.Allocator;
 
-public class Contiguous {
+public class Contiguous implements Allocator{
+    public Contiguous(int blocks) {
+
+    }
 }

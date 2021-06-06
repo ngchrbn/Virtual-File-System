@@ -1,4 +1,7 @@
 package VFS.Allocator;
 
-public class Indexed {
+public class Indexed  implements Allocator{
+    public Indexed(int blocks) {
+
+    }
 }
