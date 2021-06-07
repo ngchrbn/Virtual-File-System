@@ -39,12 +39,8 @@ public class VirtualFileSystem {
         {
             case "CreateFile" -> {
                 String newFilePath = args[0];
+                StringBuilder filePath = extractPrePath(newFilePath);
 
-                String[] rootPath = newFilePath.split("/");
-                StringBuilder filePath = new StringBuilder();
-                for (int i=0; i<rootPath.length-1; ++i) {
-                    filePath.append(rootPath[i]).append("/");
-                }
                 Directory dir = GetDirectory(filePath.toString(), getRoot());
 
                 if (validateDirectory(newFilePath, dir)) {
@@ -65,12 +61,8 @@ public class VirtualFileSystem {
             }
             case "CreateFolder" -> {
                 String newFolderPath = args[0];
+                StringBuilder folderPath = extractPrePath(newFolderPath);
 
-                String[] rootPath = newFolderPath.split("/");
-                StringBuilder folderPath = new StringBuilder();
-                for (int i=0; i<rootPath.length-1; ++i) {
-                    folderPath.append(rootPath[i]).append("/");
-                }
                 Directory directory = GetDirectory(folderPath.toString(), getRoot());
 
                 if (validateDirectoryPath(newFolderPath, directory)) {
@@ -85,6 +77,18 @@ public class VirtualFileSystem {
                     System.out.println("Directory already exists");
             }
         }
+    }
+
+    private StringBuilder extractPrePath(String Path) {
+        String[] rootPath = Path.split("/");
+
+        StringBuilder existingPath = new StringBuilder();
+
+        for (int i=0; i< rootPath.length-1; ++i) {
+            existingPath.append(rootPath[i]).append("/");
+        }
+
+        return existingPath;
     }
 
     private boolean validateDirectory(String filePath, Directory dir) {
