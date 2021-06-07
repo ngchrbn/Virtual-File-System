@@ -3,9 +3,19 @@ package VFS.Allocator;
 import VFS.VFileManager.Directory;
 import VFS.VFileManager._File;
 
-public class Contiguous implements Allocator{
-    public Contiguous(int blocks) {
+import java.util.ArrayList;
 
+public class Contiguous implements Allocator{
+
+    private ArrayList<Integer> nBlocks = new ArrayList<>();
+
+    private final String SystemPath = "VFS.txt";
+    private int loadIndex = 1;
+    private String[] vfsContentList;
+
+    public Contiguous(int blocks) {
+        for (int i=0; i<blocks; ++i)
+            nBlocks.add(-1);
     }
 
     /**
@@ -41,7 +51,53 @@ public class Contiguous implements Allocator{
 
     @Override
     public int allocateFile(_File file) {
+        if (file.getStartIndex() != -1)
+        {
+            int start = file.getStartIndex();
+            int size = file.getSize();
+            boolean validBlocks = true;
+            for (int i=0; i<size; ++i) {
+                if (nBlocks.get(i+start) != -1) {
+                    validBlocks = false;
+                    break;
+                }
+            }
+            if (validBlocks) {
+                for (int i = 0; i < size; i++) {
+                    nBlocks.set(i+start, 1);
+                }
+                return start;
+            }
+            else {
+                System.out.println("Invalid index for the block");
+                return -1;
+            }
+        }
+
+        ArrayList<Integer> startIndexes = new ArrayList<>();
+        ArrayList<Integer> blocksSize = new ArrayList<>();
+
+        getFreeBlocks(startIndexes, blocksSize);
+
+        int startIndex = getStartIndex(startIndexes, blocksSize, file.getSize()) ;
+
+        if (startIndex != -1) {
+            file.setStartIndex(startIndex);
+            for (int i=0; i<file.getSize(); ++i) {
+                nBlocks.set(startIndex+i, 1);
+                file.getAllocatedBlocks().add(startIndex+i);
+            }
+        }
+
+        return startIndex;
+    }
+
+    private int getStartIndex(ArrayList<Integer> startIndexes, ArrayList<Integer> blocksSize, int size) {
         return 0;
+    }
+
+    private void getFreeBlocks(ArrayList<Integer> startIndexes, ArrayList<Integer> blocksSize) {
+
     }
 
     @Override
