@@ -5,7 +5,6 @@ import VFS.Allocator.Allocator;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class VirtualFileSystem {
     private Directory root;
@@ -33,21 +32,16 @@ public class VirtualFileSystem {
      * Execute the given command after validating the path(if given).
      * @param cmd command to execute
      * @param args arguments of the command if needed
-     * @param nArgs number of arguments for the command
      */
-    public void execute(String cmd, String[] args, Integer nArgs) {
+    public void execute(String cmd, String[] args) {
 
         switch (cmd)
         {
             case "CreateFile" -> {
                 String newFilePath = args[0];
+                StringBuilder filePath = extractPrePath(newFilePath);
 
-                String[] rootPath = newFilePath.split("/");
-                String filePath = "";
-                for (int i=0; i<rootPath.length-1; ++i) {
-                    filePath += rootPath[i] + "/";
-                }
-                Directory dir = GetDirectory(filePath, getRoot());
+                Directory dir = GetDirectory(filePath.toString(), getRoot());
 
                 if (validateDirectory(newFilePath, dir)) {
                     _File file = new _File(newFilePath, Integer.parseInt(args[1]));
@@ -67,16 +61,9 @@ public class VirtualFileSystem {
             }
             case "CreateFolder" -> {
                 String newFolderPath = args[0];
+                StringBuilder folderPath = extractPrePath(newFolderPath);
 
-                String[] rootPath = newFolderPath.split("/");
-                String folderPath = "";
-                for (int i=0; i<rootPath.length-1; ++i) {
-                    folderPath += rootPath[i] + "/";
-                }
-                System.out.println(Arrays.toString(rootPath));
-                System.out.println(folderPath);
-                Directory directory = GetDirectory(folderPath, getRoot());
-                System.out.println(directory);
+                Directory directory = GetDirectory(folderPath.toString(), getRoot());
 
                 if (validateDirectoryPath(newFolderPath, directory)) {
                     Directory dir = new Directory();
@@ -89,7 +76,63 @@ public class VirtualFileSystem {
                 else
                     System.out.println("Directory already exists");
             }
+            case "DeleteFile" -> {
+                StringBuilder filePath = extractPrePath(args[0]);
+                Directory dir = GetDirectory(filePath.toString(), getRoot());
+
+                deleteFile(args[0], dir);
+            }
+            case "DeleteFolder" -> {
+                StringBuilder folderPath = extractPrePath(args[0]);
+                Directory dir = GetDirectory(folderPath.toString(), getRoot());
+                System.out.println(args[0]);
+                deleteDirectory(args[0], dir);
+            }
+            case "DisplayDiskStatus" -> {
+                allocator.displayDiskStatus();
+            }
+            case "DisplayDiskStructure" -> {
+                getRoot().printDirectoryStructure(0);
+            }
         }
+    }
+
+    private void deleteFile(String filePath, Directory dir) {
+        ArrayList<_File> files = dir.getFiles();
+
+        for (_File file: files) {
+            if (file.getFilePath().equals(filePath)) {
+                allocator.deAllocateFile(file);
+                dir.getFiles().remove(file);
+                System.out.println("File deleted successfully");
+            }
+        }
+        System.out.println("File does not exist!");
+    }
+
+    private void deleteDirectory(String path, Directory dir) {
+        ArrayList<Directory> directories = dir.getSubDirectories();
+
+        for (Directory directory: directories) {
+            if (directory.getDirectoryPath().equals(path)) {
+                dir.getSubDirectories().remove(directory);
+                System.out.println("Folder deleted successfully");
+                return;
+            }
+        }
+        System.out.println("Directory does not exist!");
+    }
+
+    private StringBuilder extractPrePath(String Path) {
+        String[] rootPath = Path.split("/");
+
+        StringBuilder existingPath = new StringBuilder();
+
+        for (int i=0; i< rootPath.length-1; ++i) {
+            existingPath.append(rootPath[i]).append("/");
+        }
+
+        return existingPath;
     }
 
     private boolean validateDirectory(String filePath, Directory dir) {
@@ -135,8 +178,5 @@ public class VirtualFileSystem {
         return directory;
     }
 
-    private boolean validatePath(String arg) {
-        String[] path = arg.split("/");
-        return false;
-    }
+
 }

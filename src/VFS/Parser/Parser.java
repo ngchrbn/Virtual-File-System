@@ -43,7 +43,7 @@ public class Parser {
                 helpArg(cmd);
             }
             else {
-                this.vfs.execute(cmd, args, cmdArgs.get(cmd));
+                this.vfs.execute(cmd, args);
             }
         }
     }

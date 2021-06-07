@@ -11,6 +11,11 @@ public class Directory {
     private ArrayList<Directory> subDirectories = new ArrayList<>();
 
     private boolean deleted = false;
+
+    public Directory() {}
+    public Directory(String name) {
+        directoryPath = name;
+    }
     public void setDirectoryPath(String directoryPath) {
         this.directoryPath = directoryPath;
     }
@@ -63,5 +68,32 @@ public class Directory {
     @Override
     public String toString() {
         return directoryPath;
+    }
+
+    public void printDirectoryStructure(int level) {
+        System.out.println(directoryPath);
+        printDirectory(level+1, this);
+    }
+
+    private void printDirectory(int level, Directory directory) {
+        printFiles(directory.files, level);
+        ArrayList<Directory> directories = directory.getSubDirectories();
+        for (Directory dir: directories) {
+            for (int j=0; j<level*2; ++j)
+                System.out.print("   ");
+            System.out.println(dir.getDirectoryPath());
+            level++;
+            printDirectory(level, dir);
+            level--;
+        }
+    }
+
+    private void printFiles(ArrayList<_File> files, int level) {
+        for (_File file : files) {
+            for (int j = 0; j < level * 2; ++j) {
+                System.out.print("   ");
+            }
+            System.out.println(file.getFilePath());
+        }
     }
 }
