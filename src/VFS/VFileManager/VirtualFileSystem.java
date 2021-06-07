@@ -69,14 +69,11 @@ public class VirtualFileSystem {
                 String newFolderPath = args[0];
 
                 String[] rootPath = newFolderPath.split("/");
-                String folderPath = "";
+                StringBuilder folderPath = new StringBuilder();
                 for (int i=0; i<rootPath.length-1; ++i) {
-                    folderPath += rootPath[i] + "/";
+                    folderPath.append(rootPath[i]).append("/");
                 }
-                System.out.println(Arrays.toString(rootPath));
-                System.out.println(folderPath);
-                Directory directory = GetDirectory(folderPath, getRoot());
-                System.out.println(directory);
+                Directory directory = GetDirectory(folderPath.toString(), getRoot());
 
                 if (validateDirectoryPath(newFolderPath, directory)) {
                     Directory dir = new Directory();
