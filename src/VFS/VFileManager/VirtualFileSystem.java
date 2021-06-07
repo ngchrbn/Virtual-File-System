@@ -5,7 +5,6 @@ import VFS.Allocator.Allocator;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class VirtualFileSystem {
     private Directory root;
@@ -132,8 +131,5 @@ public class VirtualFileSystem {
         return directory;
     }
 
-    private boolean validatePath(String arg) {
-        String[] path = arg.split("/");
-        return false;
-    }
+
 }
