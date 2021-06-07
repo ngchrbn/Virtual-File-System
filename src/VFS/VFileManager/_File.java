@@ -11,6 +11,9 @@ public class _File {
 
     private int size;
 
+
+    private int startIndex = -1;
+
     public _File(int size) {
         setSize(size);
     }
@@ -50,6 +53,14 @@ public class _File {
 
     public boolean isDeleted() {
         return deleted;
+    }
+
+    public void setStartIndex(int startIndex) {
+        this.startIndex = startIndex;
+    }
+
+    public int getStartIndex() {
+        return startIndex;
     }
 
     @Override
