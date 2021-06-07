@@ -76,7 +76,51 @@ public class VirtualFileSystem {
                 else
                     System.out.println("Directory already exists");
             }
+            case "DeleteFile" -> {
+                StringBuilder filePath = extractPrePath(args[0]);
+                Directory dir = GetDirectory(filePath.toString(), getRoot());
+
+                deleteFile(args[0], dir);
+            }
+            case "DeleteFolder" -> {
+                StringBuilder folderPath = extractPrePath(args[0]);
+                Directory dir = GetDirectory(folderPath.toString(), getRoot());
+                System.out.println(args[0]);
+                deleteDirectory(args[0], dir);
+            }
+            case "DisplayDiskStatus" -> {
+                allocator.displayDiskStatus();
+            }
+            case "DisplayDiskStructure" -> {
+                getRoot().printDirectoryStructure(0);
+            }
         }
+    }
+
+    private void deleteFile(String filePath, Directory dir) {
+        ArrayList<_File> files = dir.getFiles();
+
+        for (_File file: files) {
+            if (file.getFilePath().equals(filePath)) {
+                allocator.deAllocateFile(file);
+                dir.getFiles().remove(file);
+                System.out.println("File deleted successfully");
+            }
+        }
+        System.out.println("File does not exist!");
+    }
+
+    private void deleteDirectory(String path, Directory dir) {
+        ArrayList<Directory> directories = dir.getSubDirectories();
+
+        for (Directory directory: directories) {
+            if (directory.getDirectoryPath().equals(path)) {
+                dir.getSubDirectories().remove(directory);
+                System.out.println("Folder deleted successfully");
+                return;
+            }
+        }
+        System.out.println("Directory does not exist!");
     }
 
     private StringBuilder extractPrePath(String Path) {
