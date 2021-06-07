@@ -32,9 +32,8 @@ public class VirtualFileSystem {
      * Execute the given command after validating the path(if given).
      * @param cmd command to execute
      * @param args arguments of the command if needed
-     * @param nArgs number of arguments for the command
      */
-    public void execute(String cmd, String[] args, Integer nArgs) {
+    public void execute(String cmd, String[] args) {
 
         switch (cmd)
         {
