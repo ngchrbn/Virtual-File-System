@@ -43,11 +43,11 @@ public class VirtualFileSystem {
                 String newFilePath = args[0];
 
                 String[] rootPath = newFilePath.split("/");
-                String filePath = "";
+                StringBuilder filePath = new StringBuilder();
                 for (int i=0; i<rootPath.length-1; ++i) {
-                    filePath += rootPath[i] + "/";
+                    filePath.append(rootPath[i]).append("/");
                 }
-                Directory dir = GetDirectory(filePath, getRoot());
+                Directory dir = GetDirectory(filePath.toString(), getRoot());
 
                 if (validateDirectory(newFilePath, dir)) {
                     _File file = new _File(newFilePath, Integer.parseInt(args[1]));
