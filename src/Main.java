@@ -57,8 +57,8 @@ public class Main {
         System.out.print("\n--> ");
         while (input.hasNext()) {
             command = input.nextLine();
-            if (command.equalsIgnoreCase("q")) break;
             parser.validate(command);
+            if (command.equalsIgnoreCase("q")) break;
             System.out.print("\n--> ");
         }
     }

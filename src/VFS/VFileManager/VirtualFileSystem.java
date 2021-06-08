@@ -18,6 +18,7 @@ public class VirtualFileSystem {
         setRoot(new Directory());
         getRoot().setDirectoryPath("root");
         this.allocator = allocator;
+        this.allocator.loadHardDisk(getRoot());
     }
 
     private Directory getRoot() {
@@ -94,6 +95,7 @@ public class VirtualFileSystem {
             case "DisplayDiskStructure" -> {
                 getRoot().printDirectoryStructure(0);
             }
+            case "q" -> allocator.saveHardDisk(getRoot());
         }
     }
 

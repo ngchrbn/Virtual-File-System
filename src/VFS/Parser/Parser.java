@@ -15,7 +15,8 @@ public class Parser {
             entry("DeleteFile", 1),
             entry("DeleteFolder", 1),
             entry("DisplayDiskStatus", 0),
-            entry("DisplayDiskStructure", 0)
+            entry("DisplayDiskStructure", 0),
+            entry("q", 0)
     );
 
     public Parser(Allocator allocator) throws IOException {
